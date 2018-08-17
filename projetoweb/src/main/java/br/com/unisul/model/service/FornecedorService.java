@@ -24,5 +24,10 @@ public class FornecedorService {
 	public void excluir(int indice) {
 		lista.remove(indice);
 	}
+
+
+	public Fornecedor buscarPorIndice(int indice) {
+		return lista.get(indice);
+	}
 	
 }

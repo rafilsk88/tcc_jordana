@@ -33,14 +33,26 @@ public class FornecedorServlet extends HttpServlet {
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
+		Fornecedor forn = new Fornecedor();
 		String i = req.getParameter("i");
-		if (i != null && i!="") {
-			fornecedorService.excluir(Integer.parseInt(i));
+		String acao = req.getParameter("acao");
+		
+		if(i != null && i!="" && acao!=null && acao!="") {
+			if(acao.equals("exc")){
+				int indice = Integer.parseInt(i);
+				fornecedorService.excluir(indice);
 
+			}else if(acao.equals("edit")) {
+				int indice = Integer.parseInt(i);
+				forn = fornecedorService.buscarPorIndice(indice);
+			}
 		}
+		
 
 		RequestDispatcher dispatcher = req.getRequestDispatcher("fornecedor.jsp");
-
+		req.setAttribute("forn", forn);
+		req.setAttribute("ifor", i);
+		req.setAttribute("ifor", -1);
 		req.setAttribute("listaFornecedor", fornecedorService.getTodosFornecedores());
 
 		dispatcher.forward(req, resp);
@@ -64,6 +76,11 @@ public class FornecedorServlet extends HttpServlet {
 		// Adicionando este objeto a uma lista
 
 		fornecedorService.cadastrar(forn);
+		
+		forn = new Fornecedor();
+		forn.setNome("");
+		forn.setRazaoSocial("");
+		forn.setCnpj("");
 
 		RequestDispatcher dispatcher = req.getRequestDispatcher("fornecedor.jsp");
 		req.setAttribute("msg", "Cadastrado com sucesso!");
